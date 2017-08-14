@@ -1,0 +1,93 @@
+{
+  "name": "simon",
+  "id": "uuid.uuid3(\"datadrivendiscovery.org\", \"simon\"+\"1.0.0\")",
+  "common_name": "Data Type Predictor",
+  "description": "Predict the data type of the input data",
+  "languages": [ "python" ],
+  "library": "simon",
+  "version": "1.0.0",
+  "source_code": "https://github.com/azunre/simon/tree/simon-DeepNet",
+  "is_class": true,
+  "parameters": [
+    {
+      "shape": "1",
+      "type": "string",
+      "name": "dockerAddress",
+      "description": "The address of the docker container hosting the primitive",
+      "is_hyperparameter": false
+    }
+  ],
+  "methods_available": [
+    {
+      "name": "predict",
+      "description": "Predict data types",
+      "id": "SimonPrimitiveRESTWrapper.predict",
+      "parameters": [
+        {
+          "shape": "n_samples, n_features",
+          "type": "array-like",
+          "name": "data",
+          "description": "Matrix where each value is the string representation of a cell from a tabular file",
+          "is_hyperparameter": false
+        },
+        {
+          "shape": "n_dimensions",
+          "type": "array-like",
+          "name": "input_data_shape",
+          "description": "The shape of the data",
+          "is_hyperparameter": false
+        },
+        {
+          "shape": "n_samples",
+          "type": "array-like",
+          "name": "input_data_types",
+          "description": "The data types for each column in data",
+          "is_hyperparameter": false
+        },
+        {
+          "shape": "1",
+          "type": "boolean",
+          "name": "first_value_label",
+          "description": "Flag for whether or not the first row in the input data contains labels",
+          "is_hyperparameter": false
+        }
+      ],
+
+      "returns": {
+        "shape": "n_samples",
+        "type": "array-like",
+        "name": "labels",
+        "description": "A list of string label lists of the data types for every sample in X, following index order"
+      }
+    }
+  ],
+  "algorithm_type": [ "Deep Learning", "Neural Network" ],
+  "task_type": ["Evaluation"],
+  "tags": [ ],
+  "is_deterministic": false,
+  "handles_classification": true,
+  "handles_multiclass": true,
+  "handles_multilabel": true,
+  "input_type": ["DENSE"],
+  "output_type": ["PREDICTIONS"],
+  "team": "Distill",
+  "schema_version": 1.0,
+  "build": [
+    {
+      "type": "docker",
+      "image": "https://github.com/NewKnowledge/simon-thin-client",
+      "registry": "registry.datadrivendiscovery.org"
+    }
+  ],
+  "compute_resources": {
+      "sample_size": [ 36.1 ],
+      "sample_unit": [ "KB" ],
+      "num_nodes": [ 1 ],
+      "cores_per_node": [ 1 ],
+      "gpus_per_node": [ 0 ],
+      "mem_per_node": [ 8.0 ],
+      "disk_per_node": [ 16.0 ],
+      "mem_per_gpu": [ 0 ],
+      "expected_running_time": [39.2]
+    }
+}
