@@ -6,6 +6,7 @@ import dill
 import random
 import pandas
 import traceback
+import numpy as np
 from typing import List
 
 from kafka import KafkaConsumer, KafkaProducer
@@ -29,10 +30,10 @@ class SimonListener:
 		print("Reading file")
 		df = self.getDataFrame(msg)
 		print("Predicting file")
-		columns, labels = self.model.predictDataFrame(df)
-		samples = [random.sample(list(df.ix[:,col].values), 5) for col in columns]
-		msg = self.messageHandler.addSamples(msg, columns, samples)
-		return self.messageHandler.addColumnLabels(msg, columns, labels)
+		labels = self.model.predictDataFrame(df)
+		#samples = [random.sample(list(df.ix[:,col].values), 5) for col in columns]
+		#msg = self.messageHandler.addSamples(msg, columns, samples)
+		return self.messageHandler.addColumnLabels(msg, np.arange(len(labels)), labels)
 
 	# Extract the file path information from the json message and then
 	# read the file out of hdfs into a data frame
