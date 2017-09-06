@@ -7,3 +7,5 @@ int
 phone
 text
 uri
+categorical
+ordinal
