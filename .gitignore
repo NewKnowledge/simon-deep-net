@@ -103,3 +103,7 @@ ENV/
 azure_utils/*
 
 backup/
+
+kafka/__init__.py
+rest/__init__.py
+test/__init__.py
