@@ -146,7 +146,7 @@ class Encoder:
         #print(y.shape)
         
         
-        p_threshold = 0.8
+        p_threshold = 0.5
         prediction_indices = y > p_threshold
         y_pred = np.zeros(y.shape)
         y_pred[prediction_indices] = 1
