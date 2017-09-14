@@ -1,9 +1,10 @@
+import json
 import pandas
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MultiLabelBinarizer
 from keras.utils import np_utils
-import json
+from LengthStandardizer import *
 
 
 class StringToIntArrayEncoder:
@@ -32,38 +33,22 @@ class Encoder:
 
         self.char_indices = dict((c, i) for i, c in enumerate(chars))
         self._indices_char = dict((i, c) for i, c in enumerate(chars))
-
-        #print("chars {}".format(chars))
-        ##print('Sample column: {}'.format(columns[2]))
-        #print('Values: {}'.format(
-        #    np.append(header[:, None], raw_data[:, 0:2], axis=1)))
   
     def encode_matrix(self, matrix):
         chars = 20
         new_matrix = np.zeros((matrix.shape[0], matrix.shape[1], chars))
         for row in range(0, matrix.shape[0]):
-            # new_array = [_encoder.encode(string, 20) for string in
-            # matrix[row,:]]
             new_array = []
             for col in range(0, matrix.shape[1]):
                 new_matrix[row, col] = self._encoder.encode(matrix[row, col], chars)
-                # new_array[row,col].append(_encoder.encode(matrix[row,col],
-                # chars))
-            # new_matrix.append(new_array)
+                
         return new_matrix
 
     def encode_data(self, raw_data, header, max_len):
         
-        # print("DEBUG::inside encode_data:")
-        # print(raw_data.shape)
-
-
         X = np.ones((raw_data.shape[0], self.cur_max_cells,
                      max_len), dtype=np.int64) * -1
         y = self.label_encode(header)
-        
-        # print(X.shape)
-        # print(self.cur_max_cells)
         
         # track unencoded chars
         unencoded_chars = None
@@ -79,9 +64,6 @@ class Encoder:
                         try:
                             X[i, j, (max_len - 1 - k)] = self.char_indices[char]
                         except Exception:
-                            # previous unencountered character code
-                            # print("error with: {0}".format(self.char_indices))
-                            # raise
                             X[i, j, (max_len - 1 - k)] = self.char_indices[' '];
                             if char in unencoded_dict.keys():
                                 unencoded_dict[char] = unencoded_dict[char]+1
@@ -110,62 +92,38 @@ class Encoder:
         # encode class values as integers
         with open('Categories.txt','r') as f:
             Categories = f.read().splitlines()
-        # previous single-label code
-        # self._encoder.fit(Categories)
-        # encoded_Y = self._encoder.transform(Y)
-        # print("DEBUG::encoded_Y")
-        # print(encoded_Y)
-        # ret_val = np_utils.to_categorical(encoded_Y, num_classes=len(set(Categories)))
-        
+                
         # convert integers to dummy variables (i.e.  one hot encoded)
         multi_encoder = MultiLabelBinarizer()
         multi_encoder.fit([Categories])
-        # print("DEBUG::Y")
-        # print(Y)
-        # print(Y.shape)
-        # convert into 'iterable of iterables' for multilabel encoder
-        # labels = [[Y[0]], ]
-        # for i in np.arange(1,len(Y)):
-        #    labels.append(list([Y[i]]))
+                
         ret_val = multi_encoder.transform(Y)
-        # print("DEBUG::ret_val")
-        # print(ret_val)
         
-
         return ret_val
 
-    def reverse_label_encode(self, y):        
-#        return self._encoder.inverse_transform(y.argmax(1))
+    def reverse_label_encode(self, y):
+        
         with open('Categories.txt','r') as f:
             Categories = f.read().splitlines()
         multi_encoder = MultiLabelBinarizer()
         multi_encoder.fit([Categories])
-        
-        #print("DEBUG::y:")
-        #print(y)
-        #print(y.shape)
-        
-        
+         
         p_threshold = 0.5
         prediction_indices = y > p_threshold
         y_pred = np.zeros(y.shape)
         y_pred[prediction_indices] = 1
         
-        
         ret_val = multi_encoder.inverse_transform(y_pred)
-        
-        #print("DEBUG::ret_val:")
-        #print(ret_val)
         
         return ret_val
         
+    def encodeDataFrame(self, df: pandas.DataFrame):
         
-        
-    def encodeDataFrame(self, df: pandas.DataFrame):    
-        raw_data = np.char.lower(np.transpose(df.values).astype('U'))
-        
-        #print("DEBUG::raw_data")
-        #print(raw_data)
+        nx,ny = df.shape
+        out = DataLengthColumnStandardizer(df.ix[:,0],self.cur_max_cells)[np.newaxis].T
+        for i in np.arange(1,ny):
+            out = np.concatenate((out,DataLengthColumnStandardizer(df.ix[:,i],self.cur_max_cells)[np.newaxis].T),axis=1)
+        raw_data = np.char.lower(np.transpose(out).astype('U'))
         
         return self.x_encode(raw_data, 20)  
         
@@ -174,9 +132,7 @@ class Encoder:
 
         X = np.ones((raw_data.shape[0], self.cur_max_cells,
                      max_len), dtype=np.int64) * -1        
-        # print(X.shape)
-        # print(self.cur_max_cells)
-        
+                
         # track unencoded chars
         unencoded_chars = None
         with open('unencoded_chars.json') as data_file:
@@ -191,9 +147,6 @@ class Encoder:
                         try:
                             X[i, j, (max_len - 1 - k)] = self.char_indices[char]
                         except Exception:
-                            # previous unencountered character code
-                            # print("error with: {0}".format(self.char_indices))
-                            # raise
                             X[i, j, (max_len - 1 - k)] = self.char_indices[' '];
                             if char in unencoded_dict.keys():
                                 unencoded_dict[char] = unencoded_dict[char]+1
@@ -201,6 +154,5 @@ class Encoder:
                                 unencoded_dict[char] = 1
         with open('unencoded_chars.json','w') as out_file:
             json.dump(unencoded_dict, out_file)
-        #print("X shape: {0}".format(X.shape))
         
         return X

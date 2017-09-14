@@ -11,9 +11,10 @@ def main(modelName):
     read a file on white house salaries and try to predict on taht file using
     the provided model
     """
-    frame = pandas.read_csv("https://query.data.world/s/9v623xr0pkvanezo0iawba3rk")
-
-    data = pickle.dumps(frame.values)
+    #frame = pandas.read_csv("https://query.data.world/s/9v623xr0pkvanezo0iawba3rk")
+    frame = pandas.read_csv("https://s3.amazonaws.com/d3m-data/merged_o_data/o_196_merged.csv",dtype='str')
+    
+    data = pickle.dumps(frame)
 
     listener = SimonRestListener(modelName)
 

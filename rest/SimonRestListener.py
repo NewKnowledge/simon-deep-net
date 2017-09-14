@@ -17,22 +17,23 @@ class SimonRestListener:
 
     def runModel(self, data):
         results = self.model.predictDataFrame(data)
+        
         return self.encoder.encode((results))
 
     def predict(self, request_data):
-        array = pickle.loads(request_data)
-        array = pandas.DataFrame(array, columns=[str(i) for i in range(array.shape[1])])
-        return self.runModel(array)
+        frame = pickle.loads(request_data)
+                
+        return self.runModel(frame)
 
     def predictFile(self, fileName):
         frame = pandas.read_csv(str(fileName))
-        return self.runModel(frame.values)
+        return self.runModel(frame)
         
-#config = configparser.ConfigParser()
-#config.read('rest/config.ini')
-#modelName = config['DEFAULT']['modelName']
-#        
-#listener = SimonRestListener(modelName)
+config = configparser.ConfigParser()
+config.read('rest/config.ini')
+modelName = config['DEFAULT']['modelName']
+        
+listener = SimonRestListener(modelName)
 
 app = Flask(__name__)
 

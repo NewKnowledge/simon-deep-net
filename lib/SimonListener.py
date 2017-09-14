@@ -41,7 +41,7 @@ class SimonListener:
 		fileName = str(self.messageHandler.getFileName(msg))
 		if fileName.startswith("http") or fileName.startswith("ftp") or fileName.startswith("s3"):
 			try:
-				df = pandas.read_csv(fileName)
+				df = pandas.read_csv(fileName,dtype='str')
 			except:
 				df = pandas.DataFrame()
 				print("An error occurred reading " + fileName)
@@ -51,7 +51,7 @@ class SimonListener:
 			adl = get_adl_client('nktraining')
 			try:
 				with adl.open(fileName,blocksize=2**20) as f:	
-					df = pandas.read_csv(f)
+					df = pandas.read_csv(f,dtype='str')
 			except:
 				df = pandas.DataFrame()
 				print("An error occurred reading " + fileName)
