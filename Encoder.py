@@ -120,6 +120,7 @@ class Encoder:
     def encodeDataFrame(self, df: pandas.DataFrame):
         
         nx,ny = df.shape
+        
         out = DataLengthColumnStandardizer(df.ix[:,0],self.cur_max_cells)[np.newaxis].T
         for i in np.arange(1,ny):
             out = np.concatenate((out,DataLengthColumnStandardizer(df.ix[:,i],self.cur_max_cells)[np.newaxis].T),axis=1)

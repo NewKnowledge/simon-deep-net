@@ -26,7 +26,7 @@ class SimonRestListener:
         return self.runModel(frame)
 
     def predictFile(self, fileName):
-        frame = pandas.read_csv(str(fileName))
+        frame = pandas.read_csv(str(fileName),dtype='str')
         return self.runModel(frame)
         
 config = configparser.ConfigParser()

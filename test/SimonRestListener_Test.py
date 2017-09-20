@@ -12,7 +12,7 @@ def main(modelName):
     the provided model
     """
     #frame = pandas.read_csv("https://query.data.world/s/9v623xr0pkvanezo0iawba3rk")
-    frame = pandas.read_csv("https://s3.amazonaws.com/d3m-data/merged_o_data/o_196_merged.csv",dtype='str')
+    frame = pandas.read_csv("https://s3.amazonaws.com/d3m-data/merged_o_data/o_4550_merged.csv",dtype='str')
     
     data = pickle.dumps(frame)
 

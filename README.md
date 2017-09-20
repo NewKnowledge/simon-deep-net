@@ -23,11 +23,11 @@ python -m kafka.SimonKafkaConsumer
 ```
 
 #### tests
-There are two tests inluded with this package, MessageHandler_Test and SimonRestListener_Test. The SimonRestListener_Test is a simple module designed to test the functionality of a pickled model added to this package. To test your model with this code, run the following command, substituting the name of your model file for "model.pkl":
+There are two tests inluded with this package, MessageHandler_Test and SimonRestListener_Test. The SimonRestListener_Test is a simple module designed to test the functionality of a pickled model added to this package. To test your model with this code, run the following command, substituting the name of your model file for "model.pkl" (or name your model "localmodel.pkl" and omit the --modelName option completely):
 ``` bash
 python -m test.SimonRestListener_Test --modelName model.pkl
 ```
-In order to run the MessageHandler_Test, which is only used for the kafka version of the api, run the following command:
+In order to run the MessageHandler_Test, which is only used for the kafka version of the api, run the following command (there presently appears to be a bug in this test...):
 ```bash
 python -m unittest -v ./test/MessageHandler_Test.py
 ```
