@@ -78,3 +78,14 @@ COPY . ./clusterfiles
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 
 WORKDIR ./clusterfiles
+
+ENV LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+
+RUN echo $LC_ALL &&\
+    echo $LANG
+
+RUN chmod +x start_flask.sh &&\
+    sync
+
+CMD ./start_flask.sh
