@@ -1,9 +1,9 @@
-# Simon 
-This repo is built to be the base code for all New Knowledge TA1 primitives. Our Data Cleaning Operations (DCO) primitives will all be built, trained, and tested in separate repos and then pickled to be used by this codebase. All code is written in Python 3.5 and must be run in 3.5 or greater. 
+# simon 
+This repo is a deployment version of the New Knowledge deep net semantic classifier. It is an application of a fairly popular CNN+LSTM neural net architecture, traditionally employed for sentiment analysis of text, to the multiclass multilabel semantic classification task. Presently 11 categories can be identified (at a confidence of 80%) - address, boolean, datetime, email, float, int, phone, text, uri, categorical, ordinal. Deep net was developed in a separate repo (TO DO - will link here later) and then pickled to be used by this codebase, for ease of deployment. All code is written in Python 3.5 and must be run in 3.5 or greater. 
 
-#### There are a few requirements for models for them to be used by the Simon code:
-1. They must be pickled with the dill library. Note that I believe that the reasons I went with dill over pickle are no longer valid and we can probably use base pickle instead. 
-1. In order to run the model, it must be sufficient to un-pickle the model file with dill and then call "act" with a numpy array as input parameter.
+#### There are a few requirements for models for them to be used by the simon code:
+1. They must be pickled with the dill library. One can probably use base pickle instead, but it hasn't been tested. 
+1. In order to run the model, it must be sufficient to un-pickle the model file with dill and then call "predict" with a pandas DataFrame as input parameter. See test/SimonRestListener_Test.py for details on how to use the code correctly.
 1. The model must only use libraries that are included in the Dockerfile at the same level of this README. If the docker file does not contain a library you need, you can add it, but please test that change before delivering it to a third party.
 
 ### Packages
