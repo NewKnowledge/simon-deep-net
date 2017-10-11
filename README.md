@@ -10,7 +10,7 @@ This repo is a deployment version of the New Knowledge deep net semantic classif
 There are two independent libraries in this package, "rest" for responding to requests over a REST api, and "kafka" for using a pair of kafka topics to communicate with caller. The REST api is intended to be hosted in a docker container and used with a thin client that can be found at https://github.com/NewKnowledge/simon-thin-client. 
 
 #### rest
-This package consists of a single python file SimonRestListener.py which uses flask to set up REST api on port 5000. This api listens for POST requests where the body of the message is a pickled numpy array, and will respond with a json object representing the output of the model. This code can be run with the following two commands, run at the root of the project:
+This package consists of a single python file SimonRestListener.py which uses flask to set up REST api on port 5000. This api listens for POST requests where the body of the message is a pickled pandas DataFrame, and will respond with a json object representing the output of the model. This code can be run with the following two commands, run at the root of the project:
 ``` bash
 export FLASK_APP="rest/SimonRestListener.py"
 flask run
