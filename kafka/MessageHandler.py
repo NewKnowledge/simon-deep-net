@@ -12,6 +12,9 @@ class MessageHandler:
 
     def addColumnLabels(self, msg: str, c: List[str], l: List[str]) -> str:
         return self.addDict(msg, 'labels', c, l)
+        
+    def addColumnLabelProbabilities(self, msg: str, c: List[str], p: List[str]) -> str:
+        return self.addDict(msg, 'label_probabilities', c, p)
 
     def addSamples(self, msg: str, c: List[str], s: List[str]) -> str:
         return self.addDict(msg, 'samples', c, s)

@@ -29,5 +29,6 @@ class ModelBuilder:
         if not self.initialized:
             self.loadModel()
         X = self.encoder.encodeDataFrame(df)
-        pred = self.encoder.reverse_label_encode(self.model.predict(X))
-        return pred
+        y = self.model.predict(X)
+        labels, label_probs = self.encoder.reverse_label_encode(y)
+        return labels, label_probs

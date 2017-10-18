@@ -112,10 +112,17 @@ class Encoder:
         prediction_indices = y > p_threshold
         y_pred = np.zeros(y.shape)
         y_pred[prediction_indices] = 1
+
+        # extract label prediction probabilities
+        nx,ny = y.shape
+        label_probs = []
+        for i in np.arange(nx):
+            label_probs.append(y[i,prediction_indices[i,:]].tolist())
         
-        ret_val = multi_encoder.inverse_transform(y_pred)
+        # extract labels
+        labels = multi_encoder.inverse_transform(y_pred)
         
-        return ret_val
+        return labels, label_probs
         
     def encodeDataFrame(self, df: pandas.DataFrame):
         

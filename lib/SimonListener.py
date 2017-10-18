@@ -30,10 +30,12 @@ class SimonListener:
 		print("Reading file")
 		df = self.getDataFrame(msg)
 		print("Predicting file")
-		labels = self.model.predictDataFrame(df)
-		#samples = [random.sample(list(df.ix[:,col].values), 5) for col in columns]
-		#msg = self.messageHandler.addSamples(msg, columns, samples)
-		return self.messageHandler.addColumnLabels(msg, np.arange(len(labels)), labels)
+		labels, label_probs = self.model.predictDataFrame(df)
+		samples = [random.sample(list(df.ix[:,col].values), 5) for col in np.arange(len(labels))]
+		msg = self.messageHandler.addSamples(msg, np.arange(len(labels)), samples)
+		msg = self.messageHandler.addColumnLabels(msg, np.arange(len(labels)), labels)
+		msg = self.messageHandler.addColumnLabelProbabilities(msg, np.arange(len(labels)), label_probs)
+		return msg
 
 	# Extract the file path information from the json message and then
 	# read the file out of hdfs into a data frame
