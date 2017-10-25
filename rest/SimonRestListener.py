@@ -53,11 +53,7 @@ def predictFile():
     """
     request.get_data()
     
-    print("DEBUG::paths::root/instance")
-    print(app.root_path)
-    print(app.instance_path)
-    
-    return listener.predictFile(request.data)
+    return listener.predictFile(request.data.decode("utf-8"))
 
 
 # $env:FLASK_APP="rest/SimonRestListener.py"
