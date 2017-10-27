@@ -60,10 +60,14 @@ def predictUploadedFile():
     """ Listen for data being POSTed on root. The data should 
     be a string representation of a pickled numpy array
     """
+    print("DEBUG::beginning predictUploadedFile")
     request.get_data()
+    print("DEBUG::fetching file")
     file = request.files['file']
+    print("DEBUG::done fetching file")
     fileName = '/clusterfiles/uploaded_file.csv'
     file.save(fileName)
+    print("DEBUG::done saving file...")
     
     return listener.predictFile(fileName)
 
