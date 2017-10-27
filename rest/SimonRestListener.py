@@ -62,7 +62,7 @@ def predictUploadedFile():
     """
     request.get_data()
     file = request.files['file']
-    fileName = '/clusterfiles/'+request.data.decode("utf-8")
+    fileName = '/clusterfiles/uploaded_file.csv'
     file.save(fileName)
     
     return listener.predictFile(fileName)
