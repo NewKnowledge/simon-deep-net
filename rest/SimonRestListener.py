@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from json import JSONEncoder
 import dill
 import pandas
@@ -40,7 +40,7 @@ app = Flask(__name__)
 @app.route("/", methods=['POST'])
 def predict():
     """ Listen for data being POSTed on root. The data should 
-    be a string representation of a pickled numpy array
+    be a string representation of a pickled pandas frame
     """
     request.get_data()
     return listener.predict(request.data)
@@ -49,11 +49,23 @@ def predict():
 @app.route("/fileName", methods=['POST'])
 def predictFile():
     """ Listen for data being POSTed on root. The data should 
-    be a string representation of a pickled numpy array
+    be a string representation of a file name accessible by flask server
     """
     request.get_data()
     
     return listener.predictFile(request.data.decode("utf-8"))
+    
+@app.route("/fileUpload", methods=['POST'])
+def predictUploadedFile():
+    """ Listen for data being POSTed on root. The data should 
+    be a string representation of a pickled numpy array
+    """
+    request.get_data()
+    file = request.files['file']
+    fileName = '/clusterfiles/'+request.data.decode("utf-8")
+    file.save(fileName)
+    
+    return listener.predictFile(fileName)
 
 
 # $env:FLASK_APP="rest/SimonRestListener.py"
