@@ -5,6 +5,7 @@ import pandas
 import pickle
 import numpy as np
 import configparser
+import os
 
 class SimonRestListener:
     """ SimonRestListener accepts a pickled numpy array, unpickles
@@ -64,8 +65,10 @@ def predictUploadedFile():
     file = request.files['file']
     fileName = '/clusterfiles/uploaded_file.csv'
     file.save(fileName)
+    result = listener.predictFile(fileName)
+    os.remove(fileName)
     
-    return listener.predictFile(fileName)
+    return result
 
 
 # $env:FLASK_APP="rest/SimonRestListener.py"
