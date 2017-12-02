@@ -127,9 +127,8 @@ class Encoder:
         
         nx,ny = df.shape
         
-        out = DataLengthColumnStandardizer(df.ix[:,0],self.cur_max_cells)[np.newaxis].T
-        for i in np.arange(1,ny):
-            out = np.concatenate((out,DataLengthColumnStandardizer(df.ix[:,i],self.cur_max_cells)[np.newaxis].T),axis=1)
+        out = DataLengthStandardizerRaw(raw_data,self.cur_max_cells)
+        
         raw_data = np.char.lower(np.transpose(out).astype('U'))
         
         return self.x_encode(raw_data, 20)  

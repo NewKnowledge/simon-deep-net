@@ -16,23 +16,25 @@ class SimonRestListener:
        self.model =  dill.load(open(modelName, 'rb'))
        self.encoder = JSONEncoder()
 
-    def runModel(self, data):
-        results = self.model.predictDataFrame(data)
+    def runModel(self, data, p_threshold):
+        results = self.model.predictDataFrame(data,p_threshold)
         
         return self.encoder.encode((results))
 
-    def predict(self, request_data):
+    def predict(self, request_data,p_threshold):
         frame = pickle.loads(request_data)
                 
-        return self.runModel(frame)
+        return self.runModel(frame,p_threshold)
 
-    def predictFile(self, fileName):
+    def predictFile(self, fileName,p_threshold):
         frame = pandas.read_csv(str(fileName),dtype='str')
-        return self.runModel(frame)
+        return self.runModel(frame,p_threshold)
         
 config = configparser.ConfigParser()
 config.read('rest/config.ini')
 modelName = config['DEFAULT']['modelName']
+
+p_threshold=0.5 # this will need to move into the thin-client eventually
         
 listener = SimonRestListener(modelName)
 
@@ -44,7 +46,7 @@ def predict():
     be a string representation of a pickled pandas frame
     """
     request.get_data()
-    return listener.predict(request.data)
+    return listener.predict(request.data,p_threshold)
 
 
 @app.route("/fileName", methods=['POST'])
@@ -54,7 +56,7 @@ def predictFile():
     """
     request.get_data()
     
-    return listener.predictFile(request.data.decode("utf-8"))
+    return listener.predictFile(request.data.decode("utf-8"),p_threshold)
     
 @app.route("/fileUpload", methods=['POST'])
 def predictUploadedFile():
@@ -65,7 +67,7 @@ def predictUploadedFile():
     file = request.files['file']
     fileName = '/clusterfiles/uploaded_file.csv'
     file.save(fileName)
-    result = listener.predictFile(fileName)
+    result = listener.predictFile(fileName,p_threshold)
     os.remove(fileName)
     
     return result
