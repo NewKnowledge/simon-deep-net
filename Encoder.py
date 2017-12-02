@@ -101,14 +101,13 @@ class Encoder:
         
         return ret_val
 
-    def reverse_label_encode(self, y):
+    def reverse_label_encode(self, y, p_threshold):
         
         with open('Categories.txt','r') as f:
             Categories = f.read().splitlines()
         multi_encoder = MultiLabelBinarizer()
         multi_encoder.fit([Categories])
-         
-        p_threshold = 0.5
+        
         prediction_indices = y > p_threshold
         y_pred = np.zeros(y.shape)
         y_pred[prediction_indices] = 1

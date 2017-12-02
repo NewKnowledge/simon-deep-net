@@ -15,3 +15,4 @@ postal_code
 latitude
 longitude
 country
+country_code

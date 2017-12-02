@@ -25,10 +25,10 @@ class ModelBuilder:
         self.initialized = True
         return self.model
 
-    def predictDataFrame(self, df: pandas.DataFrame) -> List[str]:
+    def predictDataFrame(self, df: pandas.DataFrame,p_threshold) -> List[str]:
         if not self.initialized:
             self.loadModel()
         X = self.encoder.encodeDataFrame(df)
         y = self.model.predict(X)
-        labels, label_probs = self.encoder.reverse_label_encode(y)
+        labels, label_probs = self.encoder.reverse_label_encode(y,p_threshold)
         return labels, label_probs
