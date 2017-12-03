@@ -127,7 +127,7 @@ class Encoder:
         
         nx,ny = df.shape
         
-        out = DataLengthStandardizerRaw(raw_data,self.cur_max_cells)
+        out = DataLengthStandardizerRaw(df,self.cur_max_cells)
         
         raw_data = np.char.lower(np.transpose(out).astype('U'))
         
