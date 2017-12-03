@@ -33,8 +33,6 @@ class SimonRestListener:
 config = configparser.ConfigParser()
 config.read('rest/config.ini')
 modelName = config['DEFAULT']['modelName']
-
-p_threshold=0.5 # this will need to move into the thin-client eventually
         
 listener = SimonRestListener(modelName)
 
@@ -46,6 +44,7 @@ def predict():
     be a string representation of a pickled pandas frame
     """
     request.get_data()
+    p_threshold=0.5 # this will need to move into the thin-client eventually
     return listener.predict(request.data,p_threshold)
 
 
@@ -55,7 +54,7 @@ def predictFile():
     be a string representation of a file name accessible by flask server
     """
     request.get_data()
-    
+    p_threshold=0.5 # this will need to move into the thin-client eventually
     return listener.predictFile(request.data.decode("utf-8"),p_threshold)
     
 @app.route("/fileUpload", methods=['POST'])
@@ -67,6 +66,7 @@ def predictUploadedFile():
     file = request.files['file']
     fileName = '/clusterfiles/uploaded_file.csv'
     file.save(fileName)
+    p_threshold=0.5 # this will need to move into the thin-client eventually
     result = listener.predictFile(fileName,p_threshold)
     os.remove(fileName)
     
